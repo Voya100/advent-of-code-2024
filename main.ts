@@ -21,7 +21,7 @@ Optional arguments:
 --version [versionId]: Uses provided script version instead of default. 
                        Script name must be in format day[dayNumber]-[versionId].ts
                        versionId is always in format v[number].
-                       If versionId is 'all', all versions are processed (default)`
+                       If versionId is 'all', all versions are processed (default)`,
     );
     return;
   }
@@ -64,7 +64,7 @@ Optional arguments:
 async function getAllDayVersionPairs() {
   const allFiles = await Array.fromAsync(Deno.readDir('src'));
   return allFiles
-    .map(file => file.name)
+    .map((file) => file.name)
     .map((file) => file.match(/day(\d{1,2})(-)?(v\d*)?\.ts$/)!)
     .filter((match) => match)
     .map(([, day, , version]) => [+day, version] as [number, string | undefined])
@@ -87,7 +87,7 @@ async function processDay(day: number, version: string | null | undefined, testP
   }
 
   // Not most ideal from type security standpoint, but good enough for this use case
-  const module: DayScriptModule = await import(`./src/day${day}${version ? '-' + version : ''}`);
+  const module: DayScriptModule = await import(`./src/day${day}${version ? '-' + version : ''}.ts`);
   const versionString = version ? ` (${version})` : '';
   console.log(`Day ${day}${versionString}`);
   processDayPart(1, module.part1, input, testPerformance);
@@ -98,7 +98,7 @@ function processDayPart(
   part: 1 | 2,
   partFunction: (input: string) => string | number,
   input: string,
-  testPerformance: boolean
+  testPerformance: boolean,
 ) {
   const time = performance.now();
 
