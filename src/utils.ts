@@ -335,3 +335,19 @@ export class NumberIterator {
 export function deepClone<T>(object: T): T {
   return JSON.parse(JSON.stringify(object));
 }
+
+export interface Direction {
+  xDir: -1 | 0 | 1;
+  yDir: -1 | 0 | 1;
+}
+
+export const ALL_DIRECTIONS: Direction[] = [
+  { xDir: 1, yDir: 0 },
+  { xDir: 1, yDir: 1 },
+  { xDir: 0, yDir: 1 },
+  { xDir: -1, yDir: 1 },
+  { xDir: -1, yDir: 0 },
+  { xDir: 0, yDir: -1 },
+  { xDir: -1, yDir: -1 },
+  { xDir: 1, yDir: -1 },
+] as const;
