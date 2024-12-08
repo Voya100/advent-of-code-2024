@@ -32,6 +32,18 @@ export function toMap<T, IdType>(values: T[], idFunction: (value: T) => IdType) 
   return map;
 }
 
+export function groupBy<T, IdType>(values: T[], idFunction: (value: T) => IdType) {
+  const map = new Map<IdType, T[]>();
+  for (const value of values) {
+    const id = idFunction(value);
+    if (!map.has(id)) {
+      map.set(id, []);
+    }
+    map.get(id)!.push(value);
+  }
+  return map;
+}
+
 export function toRecord<T, IdType extends number | string>(values: T[], idFunction: (value: T) => IdType) {
   const map = {} as Record<IdType, T>;
   for (const value of values) {
