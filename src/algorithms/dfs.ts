@@ -121,7 +121,7 @@ export function findLongestPathLengthWithDfs<NodeType extends DfsNode<NodeType, 
 }
 
 /**
- * Finds longest path to target with DFS and returns its length
+ * Finds all paths to target starting from start
  */
 export function findAllPathsWithDfs<NodeType extends DfsNode<NodeType, Options>, Options>(
   start: NodeType,
