@@ -363,3 +363,27 @@ export const ALL_DIRECTIONS: Direction[] = [
   { xDir: -1, yDir: -1 },
   { xDir: 1, yDir: -1 },
 ] as const;
+
+/**
+ * Method decorator which caches results of all method calls.
+ * Uses args joined with ',' as cache key.
+ * Currently does not support more complicated cache keys.
+ */
+export function cache<This, Args extends unknown[], Return>() {
+  return function (
+    fn: (this: This, ...args: Args) => Return,
+    _ctx: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>,
+  ) {
+    const cache = new Map<string, Return>();
+
+    return function (this: This, ...args: Args): Return {
+      const valueKey = args.join(',');
+      if (cache.has(valueKey)) {
+        return cache.get(valueKey)!;
+      }
+      const value = fn.apply(this, args);
+      cache.set(valueKey, value);
+      return value;
+    };
+  };
+}
