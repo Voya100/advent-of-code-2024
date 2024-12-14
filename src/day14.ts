@@ -25,12 +25,13 @@ export function part2(input: string) {
     round++;
     const positions = robots.map((robot) => getPosition(robot, round, mapWidth, mapHeight));
 
-    // Sort by y and x coordinates so that robots next to each other on same wow are next to each other in array
+    // Sort by y and x coordinates so that robots next to each other on same row are next to each other in array
     positions.sort(compareByMultiple((p) => p.y, (p) => p.x));
 
     // Picture will have a lot of adjacent robots
     // Find count of robots which are next to at least 1 other robot horizontally
     // While this does not check how big the adjacent groups are, it is accurate enough to find likely pictura candidate
+    // (First robot of row is technically not counted, but accuracy is good enough)
     let adjacent = 0;
     for (let i = 1; i < positions.length; i++) {
       if (positions[i].y - positions[i - 1].y <= 1 && positions[i].x - positions[i - 1].x <= 1) {
