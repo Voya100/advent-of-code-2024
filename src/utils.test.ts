@@ -1,6 +1,13 @@
 import { expect } from 'jsr:@std/expect/expect';
 import { describe, it } from 'jsr:@std/testing/bdd';
-import { findLeastCommonMultiple, getAllCombinationsOfSize, getDivisors, getPrimes } from './utils.ts';
+import {
+  compareBy,
+  compareByMultiple,
+  findLeastCommonMultiple,
+  getAllCombinationsOfSize,
+  getDivisors,
+  getPrimes,
+} from './utils.ts';
 
 describe('utils.ts', () => {
   describe('getPrimes', () => {
@@ -52,6 +59,22 @@ describe('utils.ts', () => {
         [1, 3, 4],
         [2, 3, 4],
       ]);
+    });
+  });
+
+  describe('compareBy', () => {
+    it('should sort correctly', () => {
+      const values = [{ a: 1 }, { a: 3 }, { a: 3 }, { a: 2 }];
+      values.sort(compareBy((v) => v.a));
+      expect(values).toEqual([{ a: 1 }, { a: 2 }, { a: 3 }, { a: 3 }]);
+    });
+  });
+
+  describe('compareByMultiple', () => {
+    it('should sort correctly', () => {
+      const values = [{ a: 1, b: 3 }, { a: 3, b: 3 }, { a: 3, b: 2 }, { a: 2, b: 1 }];
+      values.sort(compareByMultiple((v) => v.a, (v) => v.b));
+      expect(values).toEqual([{ a: 1, b: 3 }, { a: 2, b: 1 }, { a: 3, b: 2 }, { a: 3, b: 3 }]);
     });
   });
 });

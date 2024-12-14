@@ -387,3 +387,29 @@ export function cache<This, Args extends unknown[], Return>() {
     };
   };
 }
+
+export function compareBy<T>(valueFunction: (a: T) => number | string) {
+  return function (a: T, b: T) {
+    const value1 = valueFunction(a);
+    const value2 = valueFunction(b);
+    if (value1 < value2) {
+      return -1;
+    }
+    if (value1 > value2) {
+      return 1;
+    }
+    return 0;
+  };
+}
+
+export function compareByMultiple<T>(...valueFunctions: ((a: T) => number | string)[]) {
+  return function (a: T, b: T) {
+    for (const valueFunction of valueFunctions) {
+      const result = compareBy(valueFunction)(a, b);
+      if (result !== 0) {
+        return result;
+      }
+    }
+    return 0;
+  };
+}
