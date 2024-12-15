@@ -413,3 +413,10 @@ export function compareByMultiple<T>(...valueFunctions: ((a: T) => number | stri
     return 0;
   };
 }
+
+/**
+ * Converts text input consisting of rows into 2d array "map"
+ */
+export function parseGrid(input: string): string[][] {
+  return input.split('\n').map((row) => row.split(''));
+}
