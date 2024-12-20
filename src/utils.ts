@@ -364,6 +364,23 @@ export const ALL_DIRECTIONS: Direction[] = [
   { xDir: 1, yDir: -1 },
 ] as const;
 
+export const ALL_NON_DIAGONAL_DIRECTIONS: Direction[] = [
+  { xDir: 1, yDir: 0 },
+  { xDir: 0, yDir: 1 },
+  { xDir: -1, yDir: 0 },
+  { xDir: 0, yDir: -1 },
+] as const;
+
+/**
+ * Returns adjacent coordinate in given direction
+ */
+export function getNextCoordinate({ x, y }: Coordinate, { xDir, yDir }: Direction) {
+  return {
+    x: x + xDir,
+    y: y + yDir,
+  };
+}
+
 /**
  * Method decorator which caches results of all method calls.
  * Uses args joined with ',' as cache key.
@@ -417,6 +434,32 @@ export function compareByMultiple<T>(...valueFunctions: ((a: T) => number | stri
 /**
  * Converts text input consisting of rows into 2d array "map"
  */
-export function parseGrid(input: string): string[][] {
-  return input.split('\n').map((row) => row.split(''));
+export function parseGrid<T = string>(
+  input: string,
+  valueFunction: (value: string, x: number, y: number) => T = (value) => value as T,
+): T[][] {
+  return input.split('\n').map((row, y) => row.split('').map((value, x) => valueFunction(value, x, y)));
+}
+
+export function findCoordinateForGridValue(grid: string[][], isMatch: (value: string) => boolean): Coordinate | null {
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < grid[y].length; x++) {
+      if (isMatch(grid[y][x])) {
+        return { x, y };
+      }
+    }
+  }
+  return null;
+}
+
+export function findCoordinatesForGridValue(grid: string[][], isMatch: (value: string) => boolean): Coordinate[] {
+  const coordinates: Coordinate[] = [];
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < grid[y].length; x++) {
+      if (isMatch(grid[y][x])) {
+        coordinates.push({ x, y });
+      }
+    }
+  }
+  return coordinates;
 }

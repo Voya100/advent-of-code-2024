@@ -22,7 +22,7 @@ export function findTargetWithBfs<NodeType extends BfsNode<NodeType, Options>, O
  * Generic bredth-first seach implementation for finding all matching nodes.
  * Iterates through whole graph.
  * @param start        Start node
- * @param isTargetNode Callback for determining whether node is the target or nt
+ * @param isTargetNode Callback for determining whether node is the target or not
  * @param options      Options which may be passed to node's getAdjacentNodes method
  * @returns
  */
@@ -65,22 +65,35 @@ export function findTargetsWithBfs<NodeType extends BfsNode<NodeType, Options>, 
 export abstract class BfsNode<NodeType extends BfsNode<NodeType, Options>, Options> extends GraphNode<NodeType> {
   override nodeState = {
     checked: false,
+    distanceCache: undefined as number | undefined,
     previousNode: undefined as NodeType | undefined,
   };
 
   abstract getAdjacentNodes(options: Options): NodeType[];
 
-  override getDistanceToStart(): number {
-    if (this.nodeState.previousNode) {
-      return this.nodeState.previousNode.getDistanceToStart() + 1;
+  override getDistanceToStart(cache = false): number {
+    if (cache && this.nodeState.distanceCache !== undefined) {
+      return this.nodeState.distanceCache;
     }
-    return 0;
+    let counter = 0;
+    let previousNode = this.nodeState.previousNode;
+    while (previousNode) {
+      if (cache && previousNode.nodeState.distanceCache !== undefined) {
+        counter += previousNode.nodeState.distanceCache + 1;
+        break;
+      }
+      counter++;
+      previousNode = previousNode.previousNode;
+    }
+    this.nodeState.distanceCache = counter;
+    return counter;
   }
 
   resetNodeState() {
     this.nodeState = {
       checked: false,
       previousNode: undefined,
+      distanceCache: undefined,
     };
   }
 }
