@@ -463,3 +463,47 @@ export function findCoordinatesForGridValue(grid: string[][], isMatch: (value: s
   }
   return coordinates;
 }
+
+/**
+ * Returns all distinct permutations for values
+ * Example: [1,2,3] would return permutations
+ * [1,2,3]
+ * [1,3,2]
+ * [2,1,3]
+ * [2,3,1]
+ * [3,2,1]
+ * [3,1,2]
+ */
+export function getPermutations<T>(values: T[]) {
+  return getPermutationsInner([...values]);
+}
+
+function getPermutationsInner<T>(values: T[], results: T[][] = [], index = 0) {
+  if (index >= values.length) {
+    results.push([...values]);
+    return results;
+  }
+  for (let i = index; i < values.length; i++) {
+    if (shouldSwap(values, index, i)) {
+      swap(values, index, i);
+      getPermutationsInner(values, results, index + 1);
+      swap(values, index, i);
+    }
+  }
+  return results;
+
+  function shouldSwap(values: T[], start: number, current: number) {
+    for (let i = start; i < current; i++) {
+      if (values[i] === values[current]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function swap(values: T[], i: number, j: number) {
+    const value = values[i];
+    values[i] = values[j];
+    values[j] = value;
+  }
+}

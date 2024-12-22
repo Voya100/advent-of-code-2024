@@ -6,6 +6,7 @@ import {
   findLeastCommonMultiple,
   getAllCombinationsOfSize,
   getDivisors,
+  getPermutations,
   getPrimes,
 } from './utils.ts';
 
@@ -75,6 +76,20 @@ describe('utils.ts', () => {
       const values = [{ a: 1, b: 3 }, { a: 3, b: 3 }, { a: 3, b: 2 }, { a: 2, b: 1 }];
       values.sort(compareByMultiple((v) => v.a, (v) => v.b));
       expect(values).toEqual([{ a: 1, b: 3 }, { a: 2, b: 1 }, { a: 3, b: 2 }, { a: 3, b: 3 }]);
+    });
+  });
+
+  describe('getPermutations', () => {
+    it('should get permutations', () => {
+      const values = [1, 2, 3];
+      expect(getPermutations(values)).toEqual([
+        [1, 2, 3],
+        [1, 3, 2],
+        [2, 1, 3],
+        [2, 3, 1],
+        [3, 2, 1],
+        [3, 1, 2],
+      ]);
     });
   });
 });
